@@ -23,9 +23,11 @@ Our method is implemented based on the open-source toolkit [Fairseq](https://git
 
 ### Data Pre-processing
 
-We use the data of IWSLT15 English-Vietnamese (download [here](https://nlp.stanford.edu/projects/nmt/)) and WMT15 German-English (download [here](https://www.statmt.org/wmt15/)), and apply BPE with 32K merge operations on WMT15 German-English via [subword_nmt/apply_bpe.py](https://github.com/rsennrich/subword-nmt).
+We use the data of IWSLT15 English-Vietnamese (download [here](https://nlp.stanford.edu/projects/nmt/)) WMT16 English-Romanian (download [here](https://www.statmt.org/wmt16/)) and WMT15 German-English (download [here](https://www.statmt.org/wmt15/)).
 
-Then, we process the data into the fairseq format:
+For WMT16 English-Romanian and WMT15 German-English, we tokenize the corpus via [mosesdecoder/scripts/tokenizer/normalize-punctuation.perl](https://github.com/moses-smt/mosesdecoder) and apply BPE with 32K merge operations via [subword_nmt/apply_bpe.py](https://github.com/rsennrich/subword-nmt).
+
+Then, we process the data into the fairseq format, adding `--joined-dictionary` for WMT15 German-English:
 
 ```bash
 src=SOURCE_LANGUAGE
@@ -35,6 +37,7 @@ vaild_data=PATH_TO_VALID_DATA
 test_data=PATH_TO_TEST_DATA
 data=PATH_TO_DATA
 
+# add --joined-dictionary for WMT16 English-Romanian and WMT15 German-English
 fairseq-preprocess --source-lang ${src} --target-lang ${tgt} \
     --trainpref ${train_data} --validpref ${vaild_data} \
     --testpref ${test_data}\
